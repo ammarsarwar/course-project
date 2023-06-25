@@ -75,11 +75,11 @@ const HomePage = () => {
               </form>
             </div>
             <div>
-              <p className="p-3">
+              <div className="p-3">
                 <ul className="list-disc text-pink-600">
                   <li>32K+ Review with 5star rating</li>
                 </ul>
-              </p>
+              </div>
             </div>
           </div>
           {/*right side */}
@@ -113,9 +113,10 @@ const HomePage = () => {
       <div className="px-60 p-6">
         <p className="font-bold text-4xl p-5 text-center">Popular courses</p>
         <div className="flex flex-row gap-5 justify-center p-3">
-          {courses.map((course) => (
+          {courses.map((course, index) => (
             <div
-              className="rounded-md  p-5 bg-white h-72 drop-shadow-2xl hover:bg-slate-100"
+              key={index}
+              className="rounded-md  p-5 bg-white drop-shadow-2xl hover:bg-slate-100"
               onClick={() => {
                 handleCourse(
                   course.title,
@@ -207,49 +208,37 @@ const HomePage = () => {
       <div className="px-60 p-6 mt-10">
         <p className="font-bold text-4xl p-5 text-center">Top categories</p>
         <div className="flex flex-row gap-5 justify-center p-3">
-          <div className=" flex flex-col ">
-            <span className=" relative text-3xl top-20 flex justify-center">
+          <div className=" flex flex-col " role="button" tabIndex="0">
+            <span className=" relative text-3xl top-20 flex justify-center border border-slate-900 bg-white rounded-full">
               <FaBookOpen />
             </span>
-            <button
-              className="rounded-md border border-black p-5 text-lg bg-purple-500 w-48 text-center font-bold "
-              onClick={""}
-            >
+            <div className="rounded-md border border-black p-5 text-lg bg-purple-500 w-48 text-center font-bold  ">
               Acadmic
-            </button>
+            </div>
           </div>
-          <div className=" flex flex-col ">
-            <span className=" relative text-3xl top-20 flex justify-center">
+          <div className=" flex flex-col " role="button" tabIndex="0">
+            <span className=" relative text-3xl top-20 flex justify-center border border-slate-900 bg-white rounded-full">
               <BsFillGearFill />
             </span>
-            <button
-              className="rounded-md border border-black p-5 text-lg bg-sky-600 w-48 text-center font-bold "
-              onClick={""}
-            >
+            <div className="rounded-md border border-black p-5 text-lg bg-sky-600 w-48 text-center font-bold ">
               Technical
-            </button>
+            </div>
           </div>
-          <div className=" flex flex-col ">
-            <span className=" relative text-3xl top-20 flex justify-center">
+          <div className=" flex flex-col " role="button" tabIndex="0">
+            <span className=" relative text-3xl top-20 flex justify-center border border-slate-900 bg-white rounded-full">
               <BsFillRocketTakeoffFill />
             </span>
-            <button
-              className="rounded-md border border-black p-5 text-lg bg-pink-400 w-48 text-center font-bold  "
-              onClick={""}
-            >
+            <div className="rounded-md border border-black p-5 text-lg bg-pink-400 w-48 text-center font-bold  ">
               Vocational
-            </button>
+            </div>
           </div>
-          <div className=" flex flex-col ">
-            <span className=" relative text-3xl top-20 flex justify-center">
+          <div className=" flex flex-col " role="button" tabIndex="0">
+            <span className=" relative text-3xl top-20 flex justify-center border border-slate-900 bg-white rounded-full">
               <GiStoneSphere />
             </span>
-            <button
-              className="rounded-md border border-black p-5 text-lg bg-amber-400 w-48 text-center font-bold "
-              onClick={""}
-            >
+            <div className="rounded-md border border-black p-5 text-lg bg-amber-400 w-48 text-center font-bold ">
               Others
-            </button>
+            </div>
           </div>
         </div>
       </div>

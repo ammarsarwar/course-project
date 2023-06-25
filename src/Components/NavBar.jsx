@@ -1,17 +1,37 @@
 import React from "react";
-
+import { useNavigate } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
 
 const NavBar = () => {
+  const navigate = useNavigate();
+
+  const goToHomePage = () => {
+    navigate("/");
+  };
+  const goToBlog = () => {
+    navigate("/blog");
+  };
+
+  const goToCourse = () => {
+    navigate("/courses");
+  };
+
   const handleClick = () => {
-    alert("You have logged in!");
+    navigate("/register");
   };
 
   return (
     <div>
       <div className="flex justify-evenly">
         <div className="pt-5">
-          <p className="text-2xl font-bold ">coursePortal</p>
+          <p
+            className="text-2xl font-bold "
+            onClick={goToHomePage}
+            role="button"
+            tabIndex="0"
+          >
+            coursePortal
+          </p>
         </div>
         <div className="pt-5">
           <form className="relative inline-block">
@@ -27,7 +47,7 @@ const NavBar = () => {
         </div>
         <div className="pt-5">
           <button
-            class="rounded-full bg-black text-white p-1 w-20 drop-shadow-lg border hover:border-slate-400"
+            className="rounded-full bg-black text-white p-1 w-20 drop-shadow-lg border hover:border-slate-400"
             onClick={handleClick}
           >
             login
@@ -45,10 +65,17 @@ const NavBar = () => {
         </span>
 
         <p className="font-bold">Categories</p>
-        <p className="font-bold">Courses</p>
+        <p
+          className="font-bold"
+          onClick={goToCourse}
+          role="button"
+          tabIndex="0"
+        >
+          Courses
+        </p>
         <p className="font-bold">About Us</p>
         <p className="font-bold">Mentor</p>
-        <p className="font-bold" role="button" tabIndex="0">
+        <p className="font-bold" role="button" tabIndex="0" onClick={goToBlog}>
           Blog
         </p>
         <p className="font-bold">Contact Us</p>
