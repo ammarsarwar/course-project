@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { validateEmail } from "../../utils";
+import { auth } from "../../firebase";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 
-import { supabase } from "../../client";
+// import { supabase } from "../../client";
 
 import education from "../../images/education.svg";
 
@@ -31,7 +33,8 @@ const Register = () => {
 
   const [fname, setFname] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState({ value: "", isTouched: false });
+  // const [password, setPassword] = useState({ value: "", isTouched: false });
+  const [password, setPassword] = useState("");
   const [isChecked, setIsChecked] = useState(false);
 
   const handleCheck = (e) => {
@@ -41,33 +44,62 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      const { data, error } = await supabase.auth.signUp({
-        email: email,
-        password: password,
-        options: {
-          data: {
-            name: fname,
-          },
-        },
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        // Update the user's display name
+        updateProfile(user, {
+          displayName: fname,
+        }).then(() => {
+          navigate("/");
+        });
+        console.log(userCredential);
+      })
+      .catch((error) => {
+        console.log(error);
       });
-      alert("Check your email for verification link");
-    } catch (error) {
-      alert(error);
-    }
+
+    // fetch('/api/register', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({ fname, email, password }),
+    //   })
+    //     .then((response) => response.text())
+    //     .then((data) => {
+    //       console.log(data); // Handle the server response as needed
+    //     })
+    //     .catch((error) => {
+    //       console.error('Error:', error);
+    //     });
+
+    // try {
+    //   const { data, error } = await supabase.auth.signUp({
+    //     email: email,
+    //     password: password,
+    //     // options: {
+    //     //   data: {
+    //     //     name: fname,
+    //     //   },
+    //     // },
+    //   });
+    //   alert("Check your email for verification link");
+    // } catch (error) {
+    //   alert(error);
+    // }
     setFname("");
     setEmail("");
-    setPassword({
-      value: "",
-      isTouched: false,
-    });
-    console.log("form submitted");
+    // setPassword({
+    //   value: "",
+    //   isTouched: false,
+    // });
+    setPassword("");
+    // console.log("form submitted");
   };
 
   const isFormValid = () => {
-    return (
-      fname && validateEmail(email) && password.value.length >= 8 && isChecked
-    );
+    return fname && validateEmail(email) && password.length >= 8 && isChecked;
   };
   return (
     <div>
@@ -137,15 +169,19 @@ const Register = () => {
                     type="password"
                     id="pass"
                     className="border border-black rounded-lg mt-2 h-9 p-2 w-72 "
-                    value={password.value}
+                    // value={password.value}
+                    value={password}
                     onChange={(e) => {
-                      setPassword({ ...password, value: e.target.value });
+                      setPassword(e.target.value);
                     }}
-                    onBlur={(e) => {
-                      setPassword({ ...password, isTouched: true });
-                    }}
+                    // onChange={(e) => {
+                    //   setPassword({ ...password, value: e.target.value });
+                    // }}
+                    // onBlur={(e) => {
+                    //   setPassword({ ...password, isTouched: true });
+                    // }}
                   />
-                  {password.isTouched && password.value.length < 8 ? (
+                  {password.length < 8 ? (
                     <PasswordErrorMessage />
                   ) : null}
                 </div>
@@ -155,7 +191,7 @@ const Register = () => {
                       id="link-checkbox"
                       type="checkbox"
                       value=""
-                      class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                       onChange={handleCheck}
                     />
                   </div>
@@ -168,8 +204,8 @@ const Register = () => {
                   <p className="text-sm p-2 text-red-600">
                     Please agree to the terms and conditions
                   </p>
-                ) : null} */}
-                {/* {isChecked === false ? <checkErrorMessage /> : null} */}
+                ) : null} 
+                {isChecked === false ? <checkErrorMessage /> : null} */}
                 <div className="p-3">
                   <button
                     className="border rounded-full border-black bg-blue-800 w-72 h-9 text-white"

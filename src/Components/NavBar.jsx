@@ -1,8 +1,37 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { getAuth, signOut } from "firebase/auth";
+
 import { useNavigate } from "react-router-dom";
 import { GiHamburgerMenu } from "react-icons/gi";
 
 const NavBar = () => {
+  //sign out func//
+
+  const handleLogout = async () => {
+    try {
+      const auth = getAuth();
+      await signOut(auth);
+      console.log("user signed out");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const auth = getAuth();
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const user = auth.currentUser;
+      if (user) {
+        const { displayName, email } = user;
+        setUserData({ displayName, email });
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
   const navigate = useNavigate();
 
   const goToHomePage = () => {
@@ -17,7 +46,7 @@ const NavBar = () => {
   };
 
   const handleClick = () => {
-    navigate("/register");
+    navigate("/login");
   };
 
   return (
@@ -46,12 +75,29 @@ const NavBar = () => {
           </form>
         </div>
         <div className="pt-5">
+          {userData ? (
+            userData.displayName
+          ) : (
+            <button
+              className="rounded-full bg-black text-white p-1 w-20 drop-shadow-lg border hover:border-slate-400"
+              onClick={handleClick}
+            >
+              login
+            </button>
+          )}
+
           <button
+            className="rounded-full bg-black text-white p-1 w-20 drop-shadow-lg border hover:border-slate-400"
+            onClick={handleLogout}
+          >
+            Sign out
+          </button>
+          {/* <button
             className="rounded-full bg-black text-white p-1 w-20 drop-shadow-lg border hover:border-slate-400"
             onClick={handleClick}
           >
             login
-          </button>
+          </button> */}
         </div>
       </div>
 

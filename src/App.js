@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { auth } from "./firebase";
+import { onAuthStateChanged } from "firebase/auth";
+
 import { Route, Routes } from "react-router-dom";
-import { supabase } from "./client";
+
 import HomePage from "./Pages/HomePage";
 import BlogPage from "./Pages/BlogPage";
 import Register from "./Pages/Registration/Register";
@@ -13,11 +16,23 @@ import Mentor from "./Pages/Mentor";
 import ContactUs from "./Pages/ContactUs";
 
 function App() {
+  const [authUser, setAuthUser] = useState(null);
+
+  useEffect(() => {
+    const listen = onAuthStateChanged(auth, (authUser) => {
+      if (authUser) {
+        setAuthUser(authUser);
+      } else {
+        setAuthUser(null);
+      }
+    });
+    return () => listen();
+  }, []);
   return (
     <div className="App">
       <div>
         <Routes>
-          <Route path="/" element={<HomePageLayout />}>
+          <Route path="/" element={authUser ? <HomePageLayout /> : <Login />}>
             <Route index element={<HomePage />}></Route>
             <Route path="/courses" element={<Courses />}></Route>
             <Route path="/aboutus" element={<AboutUs />}></Route>
